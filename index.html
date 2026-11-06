@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>เธอคือสายไหน?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Bebas+Neue&display=swap">
+</head>
+<body>
+<style>
+  /* Layout: worksheet page. Cream sheet with wavy corner strokes, one white rounded card, colored label pills, answers in a yellow-bordered box, orange page badge top right. */
+  :root {
+    --bg: #FFF1D2;
+    --card: #FFFFFF;
+    --fg: #2B2A33;
+    --muted: #6B6676;
+    --line: #F5C230;
+    --soft: #FFE9B5;
+    --wave: #FFD878;
+    --orange: #FF9A3C;
+    --blue: #5B6CDB;
+    --red: #D9482E;
+    --yellow: #FFD35C;
+    --green: #4FA463;
+    --ink-pill: #FFFFFF;
+    --ink-dark: #2B2A33;
+    --display: "Mali", "Noto Sans Thai", "Tahoma", sans-serif;
+    --label: "Bebas Neue", "Impact", "Arial Narrow", sans-serif;
+    --body: "Mali", "Noto Sans Thai", "Tahoma", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #2A2115;
+      --card: #3A2E1D;
+      --fg: #FFF3DA;
+      --muted: #CDBE9E;
+      --line: #C79A22;
+      --soft: #4A3B22;
+      --wave: #4F3C1E;
+      --orange: #FF9A3C;
+      --blue: #9AA7F5;
+      --red: #FF8A70;
+      --yellow: #FFD35C;
+      --green: #7BCB86;
+      --ink-pill: #1D1A2B;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #2A2115;
+    --card: #3A2E1D;
+    --fg: #FFF3DA;
+    --muted: #CDBE9E;
+    --line: #C79A22;
+    --soft: #4A3B22;
+    --wave: #4F3C1E;
+    --orange: #FF9A3C;
+    --blue: #9AA7F5;
+    --red: #FF8A70;
+    --yellow: #FFD35C;
+    --green: #7BCB86;
+    --ink-pill: #1D1A2B;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.7;
+    padding-block: 20px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .deco { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+  .wave { position: absolute; width: 320px; height: 110px; fill: none; stroke: var(--wave); stroke-width: 26; stroke-linecap: round; }
+  .w1 { top: -20px; right: -70px; transform: rotate(18deg); }
+  .w2 { bottom: 10px; left: -90px; transform: rotate(-24deg); }
+
+  .app { position: relative; max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .kicker { margin: 0; font-family: var(--label); font-size: 1.35rem; line-height: 1.2; letter-spacing: 0.04em; color: var(--muted); }
+  .title { margin: 0; font-family: var(--label); font-size: clamp(2.3rem, 9vw, 3.2rem); line-height: 1.05; letter-spacing: 0.02em; font-weight: 400; }
+  .badge {
+    flex: none;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #FFFFFF;
+    display: grid; place-items: center;
+    font-family: var(--label);
+    font-size: 1.7rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress { display: flex; gap: 6px; }
+  .seg { flex: 1; height: 8px; border-radius: 4px; background: var(--soft); }
+  .seg.done { background: var(--orange); }
+  .seg.now { background: var(--line); }
+
+  .card {
+    background: var(--card);
+    border-radius: 28px;
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 18px;
+    animation: rise 0.22s ease-out;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .pill {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 4px 22px;
+    border-radius: 999px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: var(--blue);
+    color: var(--ink-pill);
+    white-space: nowrap;
+  }
+  .pill.red { background: var(--red); }
+  .pill.yel { background: var(--yellow); color: var(--ink-dark); }
+
+  .q {
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--fg);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 4.8vw, 1.65rem);
+    line-height: 1.5;
+    text-wrap: balance;
+    outline: none;
+  }
+  .opts { display: flex; flex-direction: column; gap: 10px; border: 2px solid var(--line); border-radius: 14px; padding: 12px; }
+  .opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.6;
+    padding: 13px 16px;
+    color: var(--fg);
+    background: var(--card);
+    border: 2px solid var(--soft);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s, transform 0.12s;
+  }
+  .opt:hover { border-color: var(--orange); }
+  .opt:active { transform: scale(0.99); }
+  .opt.sel { background: var(--yellow); border-color: var(--orange); color: var(--ink-dark); }
+  .opt:focus-visible, .btn:focus-visible, .ghost:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+  .ghost {
+    align-self: flex-start;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--muted);
+    background: none;
+    border: none;
+    padding: 6px 2px;
+    cursor: pointer;
+  }
+  .ghost:hover { color: var(--fg); }
+
+  /* result */
+  .glyph { width: 104px; height: 104px; max-width: 100%; display: block; }
+  .g-o { fill: var(--orange); }
+  .g-y { fill: var(--yellow); }
+  .g-f { fill: var(--fg); }
+  .g-c { fill: var(--card); }
+  .g-b { fill: var(--blue); }
+  .g-g { fill: var(--green); }
+  .g-s { fill: none; stroke: var(--card); stroke-width: 4; stroke-linecap: round; }
+  .r-name {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 8.5vw, 3rem);
+    line-height: 1.35;
+    text-wrap: balance;
+    border-bottom: 2px solid var(--fg);
+    padding-bottom: 6px;
+    outline: none;
+  }
+  .r-tag { margin: 0; font-weight: 600; font-size: 1.1rem; line-height: 1.6; color: var(--orange); }
+  .r-desc { margin: 0; max-width: 56ch; }
+  .rows { display: flex; flex-direction: column; gap: 14px; }
+  .info { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+  .info p { margin: 0; flex: 1 1 240px; min-width: 0; padding-bottom: 4px; border-bottom: 2px solid var(--fg); font-weight: 500; }
+
+  .mix { border: 2px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .mix h2 { margin: 0 0 10px; font-family: var(--display); font-weight: 700; font-size: 1rem; }
+  .mix ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .row-top { display: flex; justify-content: space-between; gap: 12px; font-size: 0.95rem; }
+  .row-top span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); }
+  .track { height: 12px; border-radius: 6px; background: var(--soft); overflow: hidden; margin-top: 4px; }
+  .fill { height: 100%; width: var(--w); border-radius: 6px; background: var(--line); }
+  .row.first .fill { background: var(--orange); }
+  .row.first .row-top span:first-child { font-weight: 700; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn {
+    font: inherit;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 999px;
+    border: 2px solid var(--fg);
+    background: var(--fg);
+    color: var(--card);
+    cursor: pointer;
+  }
+  .btn.alt { background: transparent; color: var(--fg); }
+  .status { font-size: 0.9rem; color: var(--muted); }
+  .share-box {
+    width: 100%;
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--fg);
+    background: var(--card);
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    resize: none;
+  }
+
+  @media (max-width: 440px) {
+    .card { padding: 18px; border-radius: 22px; }
+    .opts { padding: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card { animation: none; }
+    .opt { transition: none; }
+  }
+</style>
+
+<div class="deco" aria-hidden="true">
+  <svg class="wave w1" viewBox="0 0 320 110"><path d="M10 60 Q 50 0 90 60 T 170 60 T 250 60 T 330 60"/></svg>
+  <svg class="wave w2" viewBox="0 0 320 110"><path d="M10 60 Q 50 0 90 60 T 170 60 T 250 60 T 330 60"/></svg>
+</div>
+
+<main class="app">
+  <header class="head">
+    <div>
+      <p class="kicker">FIELD WORK QUIZ</p>
+      <h1 class="title">PARK TYPE</h1>
+    </div>
+    <span class="badge" id="badge" aria-live="polite">1</span>
+  </header>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <section id="stage"></section>
+</main>
+
+<script>
+(function () {
+  var TYPES = {
+    A: {
+      name: "สายออกกำลังกาย",
+      tag: "สวนคือฟิตเนสกลางเมืองของเธอ",
+      desc: "เธอมาสวนเพื่อขยับตัว ลู่วิ่ง ทางเดินรอบสระ และลานกว้างคือที่ชาร์จพลังของเธอ ออกมารอบเดียวหัวโล่งไปทั้งวัน และมักเป็นคนชวนเพื่อนวิ่งหรือเดินเร็วด้วยกัน",
+      good: "มีวินัย ลุกไปทำจริง และดึงเพื่อนให้ขยับตามได้",
+      watch: "เหนื่อยแล้วต้องพักจริงๆ ลองหยุดนั่งมองรอบๆ สวนบ้าง จะเห็นสิ่งที่วิ่งผ่านไป",
+      park: "ที่ให้คนเมืองได้ขยับตัวใกล้บ้าน โดยไม่ต้องเสียค่าฟิตเนส",
+      glyph: '<rect class="g-f" x="50" y="6" width="20" height="10" rx="3"/><rect class="g-f" x="56" y="14" width="8" height="12"/><circle class="g-f" cx="60" cy="70" r="44"/><circle class="g-y" cx="60" cy="70" r="35"/><path class="g-o" d="M60 70 L60 40 A30 30 0 0 1 86 55 Z"/><circle class="g-f" cx="60" cy="70" r="5"/>'
+    },
+    B: {
+      name: "สายธรรมชาติ",
+      tag: "ต้นไม้ นก และกลิ่นดินคือเหตุผลที่เธอมา",
+      desc: "เธอเดินช้าๆ แล้วสังเกตเห็นสิ่งเล็กๆ ที่คนอื่นเดินผ่าน ทั้งใบไม้ รูปทรงของราก เสียงนก และแมลงตัวจิ๋ว ในสวนมีเรื่องให้เธอดูได้ทั้งวันโดยไม่เบื่อ",
+      good: "ช่างสังเกต ใจเย็น และรู้จักชื่อต้นไม้กับนกมากกว่าที่เพื่อนคิด",
+      watch: "อย่ามัวก้มดูของเล็กๆ จนลืมเงยหน้ามองภาพรวมของสวนทั้งหมด",
+      park: "ปอดกลางเมืองที่ช่วยให้เมืองเย็นลง และเป็นบ้านของสัตว์เล็กๆ",
+      glyph: '<path class="g-g" d="M60 110 C18 92 12 44 62 8 C108 42 102 92 60 110 Z"/><path class="g-s" d="M60 104 L62 24"/><path class="g-s" d="M61 78 L40 62"/><path class="g-s" d="M61 62 L84 46"/><path class="g-s" d="M62 46 L46 34"/>'
+    },
+    C: {
+      name: "สายชมวิว",
+      tag: "ขอแค่จุดที่เห็นฟ้ากว้างๆ และแสงสวยๆ",
+      desc: "เธอมองหามุมที่ทำให้หยุดเดินแล้วบอกว่า ตรงนี้สวยจัง ไม่ว่าจะเป็นแสงตอนเย็น ผิวน้ำ หรือตึกไกลๆ ที่โผล่เหนือยอดไม้ เธอรู้ว่าต้องไปยืนตรงไหนถึงจะได้ภาพที่ใช่",
+      good: "มีสายตาเรื่องมุมภาพ จับบรรยากาศเก่ง และพาเพื่อนไปเจอจุดสวยๆ ได้",
+      watch: "ลองวางมือถือลงสักห้านาที แล้วดูวิวด้วยตาตัวเองบ้าง",
+      park: "พื้นที่โล่งให้คนเมืองได้มองฟ้าและพักสายตาจากตึก",
+      glyph: '<circle class="g-y" cx="60" cy="48" r="28"/><circle class="g-o" cx="60" cy="48" r="17"/><path class="g-b" d="M0 92 Q28 56 56 82 T120 66 V120 H0 Z"/><path class="g-f" d="M0 108 Q34 84 66 100 T120 92 V120 H0 Z"/>'
+    }
+  };
+
+  var QUESTIONS = [
+    { q: "เดินผ่านประตูสวนเข้ามา สิ่งแรกที่เธอมองหาคืออะไร?",
+      opts: [
+        { k: "A", t: "ลู่วิ่ง หรือทางเดินรอบสวนว่าไปทางไหน" },
+        { k: "B", t: "ต้นไม้ใหญ่ๆ ร่มเงา และเสียงนก" },
+        { k: "C", t: "จุดที่เห็นวิวสวยๆ ไว้ยืนถ่ายรูป" }
+      ] },
+    { q: "มีเวลาในสวนหนึ่งชั่วโมง เธอจะใช้ไปกับอะไร?",
+      opts: [
+        { k: "A", t: "วิ่งหรือเดินเร็วให้ครบหลายรอบ" },
+        { k: "B", t: "เดินช้าๆ ดูต้นไม้ ดอกไม้ และสัตว์ตัวเล็กๆ" },
+        { k: "C", t: "นั่งริมน้ำ มองฟ้า มองตึกไกลๆ" }
+      ] },
+    { q: "ช่วงเวลาไหนที่เธออยากมาสวนที่สุด?",
+      opts: [
+        { k: "A", t: "เช้าตรู่ ตอนอากาศเย็นกำลังดีสำหรับออกกำลัง" },
+        { k: "B", t: "หลังฝนตก ที่กลิ่นดินกับกลิ่นหญ้าลอยขึ้นมา" },
+        { k: "C", t: "ตอนพระอาทิตย์ตก ที่ฟ้าเป็นสีส้ม" }
+      ] },
+    { q: "ของที่ต้องมีในกระเป๋าตอนไปสวนคืออะไร?",
+      opts: [
+        { k: "A", t: "รองเท้าผ้าใบ ขวดน้ำ และผ้าเช็ดหน้า" },
+        { k: "B", t: "หมวก ยากันยุง และสมุดจดสิ่งที่เจอ" },
+        { k: "C", t: "มือถือแบตเต็ม หรือกล้องตัวโปรด" }
+      ] },
+    { q: "ถ้าขอให้สวนมีสิ่งใหม่ได้หนึ่งอย่าง เธออยากได้อะไร?",
+      opts: [
+        { k: "A", t: "ลู่วิ่งเพิ่ม กับลานออกกำลังกายกลางแจ้ง" },
+        { k: "B", t: "พื้นที่ป่าเล็กๆ ที่ปลูกต้นไม้พื้นถิ่นให้หนาแน่น" },
+        { k: "C", t: "จุดชมวิวบนที่สูง ที่มองเห็นทั้งสวนและเมือง" }
+      ] }
+  ];
+
+  var KEYS = ["A", "B", "C"];
+  var stage = document.getElementById("stage");
+  var progress = document.getElementById("progress");
+  var badge = document.getElementById("badge");
+  var idx = 0;
+  var answers = [];
+  var orders = [];
+  var locked = false;
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function reset() {
+    idx = 0;
+    answers = [];
+    locked = false;
+    orders = QUESTIONS.map(function (q) { return shuffle(q.opts); });
+  }
+
+  function drawProgress() {
+    var html = "";
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      var cls = i < idx ? "seg done" : (i === idx ? "seg now" : "seg");
+      html += '<span class="' + cls + '"></span>';
+    }
+    progress.innerHTML = html;
+  }
+
+  function focusHeading(id) {
+    var el = document.getElementById(id);
+    if (el && el.focus) {
+      try { el.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+    }
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    var opts = orders[idx].map(function (o) {
+      var sel = answers[idx] === o.k ? " sel" : "";
+      return '<button type="button" class="opt' + sel + '" data-k="' + o.k + '">' + o.t + "</button>";
+    }).join("");
+    stage.innerHTML =
+      '<div class="card">' +
+      '<span class="pill">คำถามที่ ' + (idx + 1) + " จาก " + QUESTIONS.length + "</span>" +
+      '<h2 class="q" id="q" tabindex="-1">' + q.q + "</h2>" +
+      '<div class="opts" role="group" aria-labelledby="q">' + opts + "</div>" +
+      (idx > 0 ? '<button type="button" class="ghost" id="back">← ย้อนกลับ</button>' : "") +
+      "</div>";
+    badge.textContent = String(idx + 1);
+    progress.hidden = false;
+    drawProgress();
+    focusHeading("q");
+  }
+
+  function score() {
+    var s = { A: 0, B: 0, C: 0 };
+    var last = { A: -1, B: -1, C: -1 };
+    for (var i = 0; i < QUESTIONS.length; i++) {
+      var k = answers[i];
+      s[k] += 1;
+      last[k] = i;
+    }
+    var keys = KEYS.slice().sort(function (x, y) {
+      if (s[y] !== s[x]) return s[y] - s[x];
+      return last[y] - last[x];
+    });
+    return { s: s, keys: keys };
+  }
+
+  function renderResult() {
+    var r = score();
+    var top = TYPES[r.keys[0]];
+    var rows = r.keys.map(function (k, i) {
+      var pct = Math.round((r.s[k] / QUESTIONS.length) * 100);
+      return '<li class="row' + (i === 0 ? " first" : "") + '">' +
+        '<div class="row-top"><span>' + TYPES[k].name + "</span><span>" + pct + "%</span></div>" +
+        '<div class="track"><div class="fill" style="--w:' + pct + '%"></div></div></li>';
+    }).join("");
+    stage.innerHTML =
+      '<div class="card">' +
+      '<span class="pill red">ผลของเธอ</span>' +
+      '<svg class="glyph" viewBox="0 0 120 120" role="img" aria-label="ไอคอนของ' + top.name + '">' + top.glyph + "</svg>" +
+      '<h2 class="r-name" id="rn" tabindex="-1">' + top.name + "</h2>" +
+      '<p class="r-tag">' + top.tag + "</p>" +
+      '<p class="r-desc">' + top.desc + "</p>" +
+      '<div class="rows">' +
+      '<div class="info"><span class="pill">เด่นที่</span><p>' + top.good + "</p></div>" +
+      '<div class="info"><span class="pill yel">ระวังนิด</span><p>' + top.watch + "</p></div>" +
+      '<div class="info"><span class="pill red">สวนสำหรับเธอ</span><p>' + top.park + "</p></div>" +
+      "</div>" +
+      '<div class="mix"><h2>สัดส่วนของเธอ</h2><ul>' + rows + "</ul></div>" +
+      '<div class="actions"><button type="button" class="btn" id="again">เล่นอีกรอบ</button>' +
+      '<button type="button" class="btn alt" id="copy">คัดลอกผลไปแชร์</button>' +
+      '<span class="status" id="status" role="status"></span></div>' +
+      '<div id="fallback"></div>' +
+      "</div>";
+    badge.textContent = "✓";
+    progress.hidden = true;
+    focusHeading("rn");
+    stage.dataset.share = "ผลของฉันคือ “" + top.name + "” " + top.tag + " (จากเกม PARK TYPE)";
+  }
+
+  function render() {
+    if (idx < QUESTIONS.length) renderQuestion();
+    else renderResult();
+  }
+
+  function copyShare() {
+    var text = stage.dataset.share || "";
+    var status = document.getElementById("status");
+    var box = document.getElementById("fallback");
+    function fallback() {
+      box.innerHTML = '<textarea class="share-box" id="share-box" rows="3" readonly></textarea>';
+      var ta = document.getElementById("share-box");
+      ta.value = text;
+      ta.focus();
+      ta.select();
+      status.textContent = "คัดลอกอัตโนมัติไม่ได้ ลากคลุมข้อความด้านล่างแล้วคัดลอกได้เลย";
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        status.textContent = "คัดลอกแล้ว ไปแปะให้เพื่อนดูได้เลย";
+        box.innerHTML = "";
+      }, fallback);
+    } catch (e) {
+      fallback();
+    }
+  }
+
+  stage.addEventListener("click", function (e) {
+    var opt = e.target.closest(".opt");
+    if (opt && !locked) {
+      locked = true;
+      answers[idx] = opt.getAttribute("data-k");
+      var all = stage.querySelectorAll(".opt");
+      for (var i = 0; i < all.length; i++) all[i].classList.remove("sel");
+      opt.classList.add("sel");
+      setTimeout(function () {
+        idx += 1;
+        locked = false;
+        render();
+      }, 280);
+      return;
+    }
+    if (e.target.closest("#back") && idx > 0 && !locked) {
+      idx -= 1;
+      render();
+      return;
+    }
+    if (e.target.closest("#again")) {
+      reset();
+      render();
+      return;
+    }
+    if (e.target.closest("#copy")) {
+      copyShare();
+    }
+  });
+
+  reset();
+  render();
+})();
+</script>
+
+</body>
+</html>
